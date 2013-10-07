@@ -78,7 +78,7 @@ public final class MsgGen
             DocumentBuilderFactory dbf=DocumentBuilderFactory.newInstance();
 
             dbf.setIgnoringComments(true);
-            dbf.setValidating(true);
+            dbf.setValidating(false);
 
             DocumentBuilder db=dbf.newDocumentBuilder();
             syntax=db.parse(syntaxFileStream);
