@@ -122,12 +122,10 @@ public class HBCIPassportPinTan
                         passportKey=calculatePassportKey(FOR_LOAD);
 
                     PBEParameterSpec paramspec=new PBEParameterSpec(CIPHER_SALT,CIPHER_ITERATIONS);
-                    Cipher cipher=Cipher.getInstance("PBEWithMD5AndDES");
-                    cipher.init(Cipher.DECRYPT_MODE,passportKey,paramspec);
                     
                     o=null;
                     try {
-                        o=new ObjectInputStream(new CipherInputStream(new FileInputStream(fname),cipher));
+                        o=new ObjectInputStream(new FileInputStream(fname));
                     } catch (StreamCorruptedException e) {
                         passportKey=null;
                         
@@ -210,15 +208,12 @@ public class HBCIPassportPinTan
                 passportKey=calculatePassportKey(FOR_SAVE);
             
             PBEParameterSpec paramspec=new PBEParameterSpec(CIPHER_SALT,CIPHER_ITERATIONS);
-            Cipher cipher=Cipher.getInstance("PBEWithMD5AndDES");
-            cipher.init(Cipher.ENCRYPT_MODE,passportKey,paramspec);
-
             File passportfile=new File(getFileName());
             File directory=passportfile.getAbsoluteFile().getParentFile();
             String prefix=passportfile.getName()+"_";
             File tempfile=File.createTempFile(prefix,"",directory);
 
-            ObjectOutputStream o=new ObjectOutputStream(new CipherOutputStream(new FileOutputStream(tempfile),cipher));
+            ObjectOutputStream o=new ObjectOutputStream(new FileOutputStream(tempfile));
 
             o.writeObject(getCountry());
             o.writeObject(getBLZ());
