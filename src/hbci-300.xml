@@ -11,25 +11,38 @@
 <!ELEMENT DEGdef ((DE | DEG)+,valids*,value*)>
 <!ATTLIST DEGdef
   id ID #REQUIRED
+>
+
+<!ATTLIST DEGdef
   needsRequestTag (1) #IMPLIED
 >
+
 
 <!ELEMENT SEGdef ((DEG | DE)+,valids*,value*)>
 <!ATTLIST SEGdef
   id ID #REQUIRED
+>
+
+<!ATTLIST SEGdef
   needsRequestTag (1) #IMPLIED
 >
 
 <!ELEMENT SFdef (SEG | SF)*>
 <!ATTLIST SFdef
   id ID #REQUIRED
+>
+<!ATTLIST SFdef
   needsRequestTag (1) #IMPLIED
 >
 
 <!ELEMENT MSGdef ((SEG | SF)+,valids*,value*)>
 <!ATTLIST MSGdef
   id ID #REQUIRED
+>
+<!ATTLIST MSGdef
   dontsign (1) #IMPLIED
+>
+<!ATTLIST MSGdef
   dontcrypt (1) #IMPLIED
 >
 
