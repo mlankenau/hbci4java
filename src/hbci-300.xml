@@ -11,26 +11,39 @@
 <!ELEMENT DEGdef ((DE | DEG)+,valids*,value*)>
 <!ATTLIST DEGdef
   id ID #REQUIRED
-  needsRequestTag CDATA "1"
 >
+
+<!ATTLIST DEGdef
+  needsRequestTag (1) #IMPLIED
+>
+
 
 <!ELEMENT SEGdef ((DEG | DE)+,valids*,value*)>
 <!ATTLIST SEGdef
   id ID #REQUIRED
-  needsRequestTag CDATA "1"
+>
+
+<!ATTLIST SEGdef
+  needsRequestTag (1) #IMPLIED
 >
 
 <!ELEMENT SFdef (SEG | SF)*>
 <!ATTLIST SFdef
   id ID #REQUIRED
-  needsRequestTag CDATA "1"
+>
+<!ATTLIST SFdef
+  needsRequestTag (1) #IMPLIED
 >
 
 <!ELEMENT MSGdef ((SEG | SF)+,valids*,value*)>
 <!ATTLIST MSGdef
   id ID #REQUIRED
-  dontsign CDATA "1"
-  dontcrypt CDATA "1"
+>
+<!ATTLIST MSGdef
+  dontsign (1) #IMPLIED
+>
+<!ATTLIST MSGdef
+  dontcrypt (1) #IMPLIED
 >
 
 <!ELEMENT DE EMPTY>
