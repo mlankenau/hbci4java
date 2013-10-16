@@ -483,7 +483,7 @@ public final class HBCIUtils
     /** Loglevel für devel-Debugging - nicht benutzen! */
     public static final int LOG_INTERN=6;
 
-    public static ThreadLocal<Properties> threadConfig;
+    public static ThreadLocal<Properties> threadConfig = null;
 
     private static char[] base64table={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
                                        'Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f',
@@ -503,6 +503,7 @@ public final class HBCIUtils
 
     private HBCIUtils()
     {
+
     }
 
     /** Lädt ein Properties-File, welches über ClassLoader.getRessourceAsStream()
@@ -685,6 +686,7 @@ public final class HBCIUtils
      */
     public static synchronized void initThread(Properties props,HBCICallback callback)
     {
+        threadConfig = new ThreadLocal<Properties>();
         ThreadGroup threadgroup=Thread.currentThread().getThreadGroup();
 
         if (HBCIUtilsInternal.callbacks.get(threadgroup)!=null) {
@@ -719,6 +721,7 @@ public final class HBCIUtils
                         HBCIUtils.LOG_DEBUG);
 
             } catch (Exception ex) {
+                ex.printStackTrace();
                 throw new HBCI_Exception("*** could not init HBCI4Java for thread group "+threadgroup.getName(),ex);
             }
         }

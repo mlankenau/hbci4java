@@ -39,7 +39,7 @@ public class HBCIUtilsInternal
     public static Hashtable  callbacks;  // threadgroup->callbackObject
     public static Hashtable  locMsgs;    // threadgroup->resourceBundle
     public static Hashtable  locales;    // threadgroup->Locale
-    
+
     private static InfoPointConnector infoPointConnector;
 
     public static String double2String(double value)
@@ -61,16 +61,16 @@ public class HBCIUtilsInternal
     {
         String[] parts=st.split("\\|");
         String   ret=null;
-        
+
         if ((idx-1)<parts.length) {
             ret=parts[idx-1];
         } else {
             ret="";
         }
-        
+
         return ret;
     }
-    
+
     public static String getAlgForBLZ(String blz)
     {
         String data=getBLZData(blz);
@@ -82,7 +82,7 @@ public class HBCIUtilsInternal
         ThreadGroup group=Thread.currentThread().getThreadGroup();
         return (HBCICallback)callbacks.get(group);
     }
-    
+
     public static String getLocMsg(String key)
     {
         ThreadGroup group=Thread.currentThread().getThreadGroup();
@@ -103,7 +103,7 @@ public class HBCIUtilsInternal
     {
         boolean ret=false;
         String  paramValue=HBCIUtils.getParam(paramName,"no");
-        
+
         if (paramValue.equals("yes")) {
             HBCIUtils.log(msg,HBCIUtils.LOG_ERR);
             HBCIUtils.log("ignoring error because param "+paramName+"=yes",HBCIUtils.LOG_ERR);
@@ -121,7 +121,7 @@ public class HBCIUtilsInternal
                 ret=true;
             }
         }
-        
+
         return ret;
     }
 
@@ -129,7 +129,7 @@ public class HBCIUtilsInternal
     {
         return Double.parseDouble(st);
     }
-    
+
     public static long string2Long(String st,long factor)
     {
         return Math.round(string2Double(st)*factor);
@@ -139,31 +139,31 @@ public class HBCIUtilsInternal
     {
         return st + ((idx!=0)?"_"+Integer.toString(idx+1):"");
     }
-    
+
     public static String[] getNextRelativePathElem(String currentPath,String targetPath)
     {
         String[] ret=null;
-        
+
         if (targetPath.startsWith(currentPath+".")) {
             ret=new String[2];
-            
+
             String subPath=targetPath.substring(currentPath.length()+1);
             int    dotPosi=subPath.indexOf('.');
             if (dotPosi==-1) {
                 dotPosi=subPath.length();
             }
             String nextPath=subPath.substring(0,dotPosi);
-            
+
             String nextName=nextPath;
             int    underscorePosi=nextPath.lastIndexOf('_');
             if (underscorePosi!=-1) {
                 nextName=nextPath.substring(0,underscorePosi);
             }
-            
+
             ret[0]=nextName;
             ret[1]=nextPath;
         }
-        
+
         return ret;
     }
 
@@ -173,7 +173,7 @@ public class HBCIUtilsInternal
 		boolean quoting=false;
 		while (posi<len) {
 			char ch=st.charAt(posi);
-			
+
 			if (!quoting) {
 				if (ch=='?') {
 					quoting=true;
@@ -189,17 +189,17 @@ public class HBCIUtilsInternal
 			} else {
 				quoting=false;
 			}
-			
+
 			posi++;
 		}
-		
+
 		return posi;
     }
-    
+
     public static String ba2string(byte[] ba)
     {
         StringBuffer ret=new StringBuffer();
-        
+
         for (int i=0;i<ba.length;i++) {
             int x=ba[i];
             if (x<0) {
@@ -211,15 +211,15 @@ public class HBCIUtilsInternal
             }
             ret.append(st+" ");
         }
-        
+
         return ret.toString();
-        
+
     }
-    
+
     public static String stripLeadingZeroes(String st)
     {
     	String ret=null;
-    	
+
     	if (st!=null) {
     		int start=0;
     		int l=st.length();
@@ -228,10 +228,10 @@ public class HBCIUtilsInternal
     		}
     		ret=st.substring(start);
     	}
-    	
+
     	return ret;
     }
-    
+
     private static synchronized InfoPointConnector getInfoPointConnector()
     {
         if (infoPointConnector==null) {
@@ -239,7 +239,7 @@ public class HBCIUtilsInternal
         }
         return infoPointConnector;
     }
-    
+
     public static void infoPointSendBPD(HBCIPassportInternal passport, Properties msgData)
     {
         if (HBCIUtils.getParam("infoPoint.enabled", "0").equals("1")) {
