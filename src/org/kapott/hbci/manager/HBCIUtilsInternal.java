@@ -79,14 +79,12 @@ public class HBCIUtilsInternal
 
     public static HBCICallback getCallback()
     {
-        ThreadGroup group=Thread.currentThread().getThreadGroup();
-        return (HBCICallback)callbacks.get(group);
+        return (HBCICallback)callbacks.get(Thread.currentThread().getId());
     }
 
     public static String getLocMsg(String key)
     {
-        ThreadGroup group=Thread.currentThread().getThreadGroup();
-        return ((ResourceBundle)locMsgs.get(group)).getString(key);
+        return ((ResourceBundle)locMsgs.get(Thread.currentThread().getId())).getString(key);
     }
 
     public static String getLocMsg(String key,Object o)

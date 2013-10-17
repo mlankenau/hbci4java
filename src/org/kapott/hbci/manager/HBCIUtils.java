@@ -689,7 +689,7 @@ public final class HBCIUtils
         threadConfig = new ThreadLocal<Properties>();
         ThreadGroup threadgroup=Thread.currentThread().getThreadGroup();
 
-        if (HBCIUtilsInternal.callbacks.get(threadgroup)!=null) {
+        if (HBCIUtilsInternal.callbacks.get(Thread.currentThread().getId())!=null) {
             HBCIUtils.log("will not initialize this threadgroup because it is already initialized",HBCIUtils.LOG_WARN);
         } else {
             try {
@@ -707,12 +707,12 @@ public final class HBCIUtils
                 // initialize callback
                 if (callback==null) {
                     ThreadGroup parent=Thread.currentThread().getThreadGroup().getParent();
-                    callback=(HBCICallback)HBCIUtilsInternal.callbacks.get(parent);
+                    callback=(HBCICallback)HBCIUtilsInternal.callbacks.get(Thread.currentThread().getId());
                     if (callback==null) {
                         throw new NullPointerException("no callback specified");
                     }
                 }
-                HBCIUtilsInternal.callbacks.put(threadgroup,callback);
+                HBCIUtilsInternal.callbacks.put(Thread.currentThread().getId(),callback);
 
                 // configure Locale
                 initLocale();
@@ -782,10 +782,10 @@ public final class HBCIUtils
         HBCIUtils.log("removing all data for current thread",HBCIUtils.LOG_DEBUG);
 
         ThreadGroup group=Thread.currentThread().getThreadGroup();
-        HBCIUtilsInternal.callbacks.remove(group);
+        HBCIUtilsInternal.callbacks.remove(Thread.currentThread().getId());
         threadConfig.set(null);
-        HBCIUtilsInternal.locMsgs.remove(group);
-        HBCIUtilsInternal.locales.remove(group);
+        HBCIUtilsInternal.locMsgs.remove(Thread.currentThread().getId());
+        HBCIUtilsInternal.locales.remove(Thread.currentThread().getId());
     }
 
     /** Bereinigen aller <em>HBCI4Java</em>-Datenstrukturen. Nach Aufruf dieser
@@ -826,13 +826,12 @@ public final class HBCIUtils
             log("using specified locale "+locale.toString(), HBCIUtils.LOG_DEBUG);
         }
 
-        ThreadGroup threadgroup=Thread.currentThread().getThreadGroup();
         synchronized (HBCIUtilsInternal.locales) {
-            HBCIUtilsInternal.locales.put(threadgroup,locale);
+            HBCIUtilsInternal.locales.put(Thread.currentThread().getId(),locale);
         }
         synchronized (HBCIUtilsInternal.locMsgs) {
             HBCIUtilsInternal.locMsgs.put(
-                    threadgroup,
+                    Thread.currentThread().getId(),
                     ResourceBundle.getBundle("org.kapott.hbci.resources.HBCIMessages",locale));
         }
     }
@@ -842,8 +841,7 @@ public final class HBCIUtils
      * sowie {@link #initLocale()}. */
     public static Locale getLocale()
     {
-        ThreadGroup group=Thread.currentThread().getThreadGroup();
-        return (Locale)HBCIUtilsInternal.locales.get(group);
+        return (Locale)HBCIUtilsInternal.locales.get(Thread.currentThread().getId());
     }
 
     /** Gibt den aktuellen Wert eines bestimmten HBCI-Parameters zurück.
@@ -857,7 +855,7 @@ public final class HBCIUtils
         ThreadGroup group=Thread.currentThread().getThreadGroup();
         Properties config=getParams();
         if (config==null)
-            throw new HBCI_Exception(HBCIUtilsInternal.getLocMsg("EXCMSG_THREAD_NOTINIT",group.getName()));
+            throw new HBCI_Exception("EXCMSG_THREAD_NOTINIT");
         return config.getProperty(st,def);
     }
 
